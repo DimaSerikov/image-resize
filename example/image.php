@@ -8,13 +8,13 @@ $webroot = __DIR__;
 $path = isset($_GET['path']) ? $_GET['path'] : '';
 
 if (isset($_GET['custom'])) {
-    DimaSerikov\ImageResize\Creator::$defaultImagePath = __DIR__ . '/no-photo.png';
+    Alexantr\ImageResize\Creator::$defaultImagePath = __DIR__ . '/no-photo.png';
 }
 
 if (isset($_GET['progressive'])) {
-    DimaSerikov\ImageResize\Creator::$enableProgressiveJpeg = true;
+    Alexantr\ImageResize\Creator::$enableProgressiveJpeg = true;
 }
 
-//DimaSerikov\ImageResize\Creator::$imagickDisabled = true;
+//Alexantr\ImageResize\Creator::$imagickDisabled = true;
 
-DimaSerikov\ImageResize\Creator::create($webroot, $path);
+Alexantr\ImageResize\Creator::create($webroot, $path);

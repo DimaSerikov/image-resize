@@ -1,6 +1,6 @@
 <?php
 
-namespace DimaSerikov\ImageResize;
+namespace Alexantr\ImageResize;
 
 class Helper
 {

@@ -20,7 +20,7 @@
   },
   "autoload": {
     "psr-4": {
-      "DimaSerikov\\ImageResize\\": "src"
+      "Alexantr\\ImageResize\\": "src"
     }
   },
   "extra": {

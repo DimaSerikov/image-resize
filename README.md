@@ -17,7 +17,7 @@ See full list of examples in `example` folder.
 Creating URLs:
 
 ```php
-use DimaSerikov\ImageResize\Image;
+use Alexantr\ImageResize\Image;
 
 $src1 = Image::init('uploads/pic.jpg')->crop(200, 200);
 $src2 = Image::init('uploads/pic.jpg')->silhouette()->quality(95)->fit(200, 200);
@@ -51,5 +51,5 @@ require '../vendor/autoload.php';
 $webroot = __DIR__;
 $path = isset($_GET['path']) ? $_GET['path'] : '';
 
-DimaSerikov\ImageResize\Creator::create($webroot, $path);
+Alexantr\ImageResize\Creator::create($webroot, $path);
 ```
