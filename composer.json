@@ -1,5 +1,5 @@
 {
-  "name": "alexantr/image-resize",
+  "name": "dimaserikov/image-resize",
   "type": "library",
   "description": "Image resizing library",
   "keywords": ["image", "gd", "imagick", "thumbnail", "resize", "crop"],
@@ -20,7 +20,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Alexantr\\ImageResize\\": "src"
+      "DimaSerikov\\ImageResize\\": "src"
     }
   },
   "extra": {

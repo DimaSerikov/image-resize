@@ -1,6 +1,6 @@
 <?php
 
-namespace Alexantr\ImageResize;
+namespace DimaSerikov\ImageResize;
 
 /**
  * Create URL for ImageCreator

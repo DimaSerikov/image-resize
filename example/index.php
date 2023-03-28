@@ -1,7 +1,7 @@
 <?php
 
-use Alexantr\ImageResize\Helper;
-use Alexantr\ImageResize\Image;
+use DimaSerikov\ImageResize\Helper;
+use DimaSerikov\ImageResize\Image;
 
 require '../vendor/autoload.php';
 
