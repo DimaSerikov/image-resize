@@ -168,7 +168,7 @@ class Helper
     /**
      * @var string base relative URL
      */
-    private static string $baseUrl;
+    private static ?string $baseUrl = null;
 
     /**
      * Returns the relative URL for the application.
