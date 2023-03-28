@@ -23,39 +23,39 @@ class Creator
     /**
      * @var string base directory where resized images are saving
      */
-    public static $resizedBaseDir = '/resized';
+    public static string $resizedBaseDir = '/resized';
     /**
      * @var int min image resolution size
      */
-    public static $minSize = 8;
+    public static int $minSize = 8;
     /**
      * @var int max image resolution size
      */
-    public static $maxSize = 3072;
+    public static int $maxSize = 3072;
     /**
      * @var int min jpeg quality
      */
-    public static $minQuality = 10;
+    public static int $minQuality = 10;
     /**
      * @var int max jpeg quality
      */
-    public static $maxQuality = 100;
+    public static int $maxQuality = 100;
     /**
      * @var int default jpeg and webp quality
      */
-    public static $defaultQuality = 90;
+    public static int $defaultQuality = 90;
     /**
      * @var string default background color
      */
-    public static $defaultBgColor = 'fff0';
+    public static string $defaultBgColor = 'fff0';
     /**
      * @var array allowed mime types
      */
-    public static $mimeTypes = array('image/gif', 'image/jpeg', 'image/png', 'image/webp');
+    public static array $mimeTypes = ['image/gif', 'image/jpeg', 'image/png', 'image/webp'];
     /**
      * @var array allowed methods
      */
-    public static $methods = array(
+    public static $methods = [
         self::FIT_CROP,
         self::FIT_CONTAIN,
         self::FIT_WIDTH,
@@ -64,27 +64,27 @@ class Creator
         self::FIT_MAX,
         self::FIT_STRETCH,
         self::PLACE_CENTER,
-    );
+    ];
     /**
      * @var string custom path to default image
      */
-    public static $defaultImagePath;
+    public static string $defaultImagePath;
     /**
      * @var string custom path to default silhouette image
      */
-    public static $defaultSilhouettePath;
+    public static string $defaultSilhouettePath;
     /**
      * @var bool generate progressive jpegs
      */
-    public static $enableProgressiveJpeg = false;
+    public static bool $enableProgressiveJpeg = false;
     /**
      * @var bool force imagick disabled
      */
-    public static $imagickDisabled = false;
+    public static bool $imagickDisabled = false;
     /**
      * @var int PNG compression level (0..9)
      */
-    public static $gdPngCompressionLevel = 9;
+    public static int $gdPngCompressionLevel = 9;
 
     /**
      * Create image based on $path
@@ -92,7 +92,7 @@ class Creator
      * @param string $path
      * @throws \Exception
      */
-    public static function create($webroot, $path)
+    public static function create(string $webroot, string $path): void
     {
         // show blank image
         if ($path == self::BLANK_IMAGE_NAME) {
@@ -131,7 +131,7 @@ class Creator
             empty($image_url) ||
             $width < self::$minSize || $height < self::$minSize ||
             $width > self::$maxSize || $height > self::$maxSize ||
-            !in_array($method, self::$methods)
+            !in_array($method, self::$methods, true)
         ) {
             self::showBlankImage();
         }
@@ -156,7 +156,7 @@ class Creator
             $orig_dirname = dirname($orig_path);
             $filename = pathinfo($orig_path, PATHINFO_FILENAME);
             $orig_ext = pathinfo($filename, PATHINFO_EXTENSION);
-            if (!empty($orig_ext) && in_array($orig_ext, array('jpeg', 'jpg', 'png', 'gif', 'webp')) && is_file($orig_dirname . '/' . $filename)) {
+            if (!empty($orig_ext) && in_array($orig_ext, ['jpeg', 'jpg', 'png', 'gif', 'webp'], true) && is_file($orig_dirname . '/' . $filename)) {
                 $orig_path = $orig_dirname . '/' . $filename;
             }
         }
@@ -189,7 +189,7 @@ class Creator
                 self::showImage($dest_path);
             }
             // reset offest
-            $abs_offset = array(0, 0);
+            $abs_offset = [0, 0];
         }
 
         // can't find default image
@@ -204,7 +204,7 @@ class Creator
         }
         $src_w = $size[0];
         $src_h = $size[1];
-        if ($src_w == 0 || $src_h == 0 || empty($size['mime']) || !in_array($size['mime'], self::$mimeTypes)) {
+        if ($src_w == 0 || $src_h == 0 || empty($size['mime']) || !in_array($size['mime'], self::$mimeTypes, true)) {
             self::showBlankImage();
         }
 
@@ -261,7 +261,7 @@ class Creator
         }
 
         // switch width & height
-        if (in_array($orientation, array(5, 6, 7, 8))) {
+        if (in_array($orientation, [5, 6, 7, 8], true)) {
             $old_w = $src_w;
             $src_w = $src_h;
             $src_h = $old_w;
@@ -415,7 +415,7 @@ class Creator
                 if ($orientation == 8 || $orientation == 7) {
                     $im->rotateImage($fill_color, 270);
                 }
-                if (in_array($orientation, array(2, 4, 5, 7))) {
+                if (in_array($orientation, [2, 4, 5, 7], true)) {
                     $im->flopImage();
                 }
 
@@ -503,7 +503,7 @@ class Creator
         if ($orientation == 8 || $orientation == 7) {
             $im = imagerotate($im, 90, 0);
         }
-        if (in_array($orientation, array(2, 4, 5, 7))) {
+        if (in_array($orientation, [2, 4, 5, 7], true)) {
             Helper::flopImage($im);
         }
 
@@ -522,12 +522,12 @@ class Creator
             imagefill($new_im, 0, 0, $color);
         }
         if ($method == self::FIT_CROP || $method == self::PLACE_CENTER) {
-            $im = Helper::cropImage($im, array(
+            $im = Helper::cropImage($im, [
                 'x' => $crop_x,
                 'y' => $crop_y,
                 'width' => $crop_w,
                 'height' => $crop_h,
-            ));
+            ]);
             $crop_x = 0;
             $crop_y = 0;
         }
@@ -576,16 +576,16 @@ class Creator
      * @param string $image_path
      * @param null|string $mime_type
      */
-    public static function showImage($image_path, $mime_type = null)
+    public static function showImage(string $image_path, ?string $mime_type = null): void
     {
         if ($mime_type === null) {
             $size = getimagesize($image_path);
-            if (!$size || $size[0] == 0 || $size[1] == 0 || empty($size['mime']) || !in_array($size['mime'], self::$mimeTypes)) {
+            if (!$size || $size[0] == 0 || $size[1] == 0 || empty($size['mime']) || !in_array($size['mime'], self::$mimeTypes, true)) {
                 self::showBlankImage();
             }
             $mime_type = $size['mime'];
         }
-        if (!in_array($mime_type, self::$mimeTypes)) {
+        if (!in_array($mime_type, self::$mimeTypes, true)) {
             self::showBlankImage();
         }
         header('Content-Type: ' . $mime_type);
@@ -597,7 +597,7 @@ class Creator
     /**
      * Show Blank Image (1x1 transparent)
      */
-    public static function showBlankImage()
+    public static function showBlankImage(): void
     {
         $image = base64_decode('R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==');
         header('Content-Type: image/gif');

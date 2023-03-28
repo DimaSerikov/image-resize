@@ -12,10 +12,11 @@
     }
   ],
   "require": {
-    "php": "^5.3 || ^7.0",
+    "php": "^8.0",
     "ext-fileinfo": "*",
     "ext-mbstring": "*",
-    "ext-exif": "*"
+    "ext-exif": "*",
+    "ext-gd": "*"
   },
   "autoload": {
     "psr-4": {

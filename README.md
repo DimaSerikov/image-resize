@@ -7,7 +7,7 @@ Image resizing library. Creates images on demand using GD.
 Install through [Composer](http://getcomposer.org/):
 
 ```
-composer require alexantr/image-resize
+composer require DimaSerikov/image-resize
 ```
 
 ## Examples

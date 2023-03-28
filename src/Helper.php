@@ -7,7 +7,7 @@ class Helper
     /**
      * @return string
      */
-    public static function getBlankImageUrl()
+    public static function getBlankImageUrl(): string
     {
         return self::getBaseUrl() . Creator::$resizedBaseDir . '/' . Creator::BLANK_IMAGE_NAME;
     }
@@ -16,9 +16,9 @@ class Helper
      * @param int|string $quality
      * @return int
      */
-    public static function processQuality($quality)
+    public static function processQuality(int|string $quality): int
     {
-        $quality = (int)$quality;
+        $quality = (int) $quality;
         if ($quality > Creator::$maxQuality) {
             $quality = Creator::$maxQuality;
         }
@@ -32,7 +32,7 @@ class Helper
      * @param string $hex
      * @return string 3, 4, 6 or 8 signs
      */
-    public static function normalizeHexColor($hex)
+    public static function normalizeHexColor(string $hex): string
     {
         $hex = str_replace('#', '', $hex);
         if (empty($hex) || !preg_match('/^([0-9a-f]{3}|[0-9a-f]{4}|[0-9a-f]{6}|[0-9a-f]{8})$/i', $hex)) {
@@ -52,51 +52,52 @@ class Helper
      * @param string $path
      * @return array|bool
      */
-    public static function parsePath($path)
+    public static function parsePath(string $path): array|bool
     {
         $methods = implode('|', Creator::$methods);
-        if (preg_match('{^(([0-9]{1,4})-([0-9]{1,4})-(' . $methods . ')(?:-q([0-9]{1,2}|100))?(?:-([a-f0-9]{3}|[a-f0-9]{4}|[a-f0-9]{6}|[a-f0-9]{8}))?(?:-([a-z]+))?(?:-o([lr][0-9]+)?([tb][0-9]+)?)?)/(.+)}', $path, $m)) {
-            $params = $m[7];
-            $params = str_split($params);
-            // abs offset
-            $abs_offset = array(0, 0);
-            $offset_x_param = isset($m[8]) ? $m[8] : '';
-            $offset_y_param = isset($m[9]) ? $m[9] : '';
-            if ($offset_x_param !== '') {
-                $offset_x_param_dir = substr($offset_x_param, 0, 1);
-                $offset_x_param_value = (int)substr($offset_x_param, 1);
-                $abs_offset[0] = $offset_x_param_dir == 'r' ? -$offset_x_param_value : $offset_x_param_value;
-            }
-            if ($offset_y_param !== '') {
-                $offset_y_param_dir = substr($offset_y_param, 0, 1);
-                $offset_y_param_value = (int)substr($offset_y_param, 1);
-                $abs_offset[1] = $offset_y_param_dir == 'b' ? -$offset_y_param_value : $offset_y_param_value;
-            }
-            return array(
-                'dir_name' => $m[1],
-                'width' => (int)$m[2],
-                'height' => (int)$m[3],
-                'method' => $m[4],
-                'quality' => ($m[5] !== '' ? Helper::processQuality($m[5]) : Creator::$defaultQuality),
-                'bg_color' => Helper::normalizeHexColor($m[6]),
-                'silhouette' => in_array('s', $params),
-                'as_jpeg' => in_array('j', $params),
-                'as_png' => in_array('p', $params),
-                'as_gif' => in_array('f', $params),
-                'as_webp' => in_array('w', $params),
-                'place_upper' => in_array('u', $params),
-                'no_top_offset' => in_array('n', $params),
-                'no_bottom_offset' => in_array('b', $params),
-                'disable_copy' => in_array('c', $params),
-                'skip_small' => in_array('t', $params),
-                'no_exif_rotate' => in_array('r', $params),
-                'grayscale' => in_array('g', $params),
-                'abs_offset' => $abs_offset,
-                'image_url' => trim($m[10]),
-            );
-        } else {
+
+        if (false === preg_match('{^(([0-9]{1,4})-([0-9]{1,4})-(' . $methods . ')(?:-q([0-9]{1,2}|100))?(?:-([a-f0-9]{3}|[a-f0-9]{4}|[a-f0-9]{6}|[a-f0-9]{8}))?(?:-([a-z]+))?(?:-o([lr][0-9]+)?([tb][0-9]+)?)?)/(.+)}', $path, $m)) {
             return false;
         }
+        $params = $m[7];
+        $params = str_split($params);
+        // abs offset
+        $abs_offset = [0, 0];
+        $offset_x_param = isset($m[8]) ? $m[8] : '';
+        $offset_y_param = isset($m[9]) ? $m[9] : '';
+        
+        if ($offset_x_param !== '') {
+            $offset_x_param_dir = substr($offset_x_param, 0, 1);
+            $offset_x_param_value = (int)substr($offset_x_param, 1);
+            $abs_offset[0] = $offset_x_param_dir == 'r' ? -$offset_x_param_value : $offset_x_param_value;
+        }
+        if ($offset_y_param !== '') {
+            $offset_y_param_dir = substr($offset_y_param, 0, 1);
+            $offset_y_param_value = (int)substr($offset_y_param, 1);
+            $abs_offset[1] = $offset_y_param_dir == 'b' ? -$offset_y_param_value : $offset_y_param_value;
+        }
+        return [
+            'dir_name' => $m[1],
+            'width' => (int)$m[2],
+            'height' => (int)$m[3],
+            'method' => $m[4],
+            'quality' => ($m[5] !== '' ? Helper::processQuality($m[5]) : Creator::$defaultQuality),
+            'bg_color' => Helper::normalizeHexColor($m[6]),
+            'silhouette' => in_array('s', $params, true),
+            'as_jpeg' => in_array('j', $params, true),
+            'as_png' => in_array('p', $params, true),
+            'as_gif' => in_array('f', $params, true),
+            'as_webp' => in_array('w', $params, true),
+            'place_upper' => in_array('u', $params, true),
+            'no_top_offset' => in_array('n', $params, true),
+            'no_bottom_offset' => in_array('b', $params, true),
+            'disable_copy' => in_array('c', $params, true),
+            'skip_small' => in_array('t', $params, true),
+            'no_exif_rotate' => in_array('r', $params, true),
+            'grayscale' => in_array('g', $params, true),
+            'abs_offset' => $abs_offset,
+            'image_url' => trim($m[10]),
+        ];
     }
 
     /**
@@ -104,10 +105,11 @@ class Helper
      * @param string $image_url
      * @return string
      */
-    public static function cleanImageUrl($image_url)
+    public static function cleanImageUrl(string $image_url): string
     {
         $image_url = str_replace('\\', '/', $image_url);
         $image_url = preg_replace('{^\./}', '', $image_url);
+        
         while (strpos($image_url, '/./') !== false) {
             $image_url = str_replace('/./', '/', $image_url); // remove "/./"
         }
@@ -118,6 +120,7 @@ class Helper
         $image_url_exploded = explode('#', $image_url);
         $image_url_exploded = explode('?', $image_url_exploded[0]);
         $image_url = $image_url_exploded[0];
+        
         if (strpos($image_url, '/') === 0) {
             $baseUrl = self::getBaseUrl();
             if (!empty($baseUrl) && strpos($image_url, $baseUrl) === 0) {
@@ -125,6 +128,7 @@ class Helper
             }
         }
         $image_url = ltrim($image_url, '/');
+
         return $image_url;
     }
 
@@ -133,9 +137,10 @@ class Helper
      * @param string $hex
      * @return array
      */
-    public static function hex2rgb($hex)
+    public static function hex2rgb(string $hex): array
     {
         $hex = self::normalizeHexColor($hex);
+        
         if (strlen($hex) == 3) {
             $r = hexdec(substr($hex, 0, 1) . substr($hex, 0, 1));
             $g = hexdec(substr($hex, 1, 1) . substr($hex, 1, 1));
@@ -157,20 +162,20 @@ class Helper
             $b = hexdec(substr($hex, 4, 2));
             $a = 255;
         }
-        return array('r' => $r, 'g' => $g, 'b' => $b, 'a' => $a);
+        return ['r' => $r, 'g' => $g, 'b' => $b, 'a' => $a];
     }
 
     /**
      * @var string base relative URL
      */
-    private static $baseUrl;
+    private static string $baseUrl;
 
     /**
      * Returns the relative URL for the application.
      * @return string Path without ending slash
      * @throws \Exception
      */
-    public static function getBaseUrl()
+    public static function getBaseUrl(): string
     {
         if (self::$baseUrl === null) {
             $scriptFile = $_SERVER['SCRIPT_FILENAME'];
@@ -205,6 +210,7 @@ class Helper
             $half_x = $max_x / 2;
             $sy = imagesy($image);
             $temp_image = imageistruecolor($image) ? imagecreatetruecolor(1, $sy) : imagecreate(1, $sy);
+
             for ($x = 0; $x < $half_x; ++$x) {
                 imagecopy($temp_image, $image, 0, 0, $x, 0, 1, $sy);
                 imagecopy($image, $image, $x, 0, $max_x - $x, 0, 1, $sy);
@@ -218,24 +224,25 @@ class Helper
      * @param array $rect
      * @return resource|bool
      */
-    public static function cropImage($src, array $rect)
+    public static function cropImage(resource $src, array $rect): bool|resource
     {
         if (!function_exists('imagecrop')) {
             $im = imagecreatetruecolor($rect['width'], $rect['height']);
             imagealphablending($im, false);
             imagesavealpha($im, true);
+            
             $color = imagecolorallocatealpha($im, 255, 255, 255, 127);
+            
             imagefilledrectangle($im, 0, 0, $rect['width'], $rect['height'], $color);
             imagecopy($im, $src, 0, 0, $rect['x'], $rect['y'], $rect['width'], $rect['height']);
         } else {
-            $im = imagecrop($src, array(
+            $im = imagecrop($src, [
                 'x' => $rect['x'],
                 'y' => $rect['y'],
                 'width' => $rect['width'],
                 'height' => $rect['height'],
-            ));
+            ]);
         }
-
         return $im;
     }
 }
