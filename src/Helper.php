@@ -126,7 +126,7 @@ class Helper
                 $image_url = mb_substr($image_url, mb_strlen($baseUrl));
             }
         }
-        $image_url = urldecode(ltrim($image_url, '/');
+        $image_url = urldecode(ltrim($image_url, '/'));
 
         return $image_url;
     }
