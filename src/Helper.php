@@ -165,7 +165,7 @@ class Helper
     }
 
     /**
-     * @var string base relative URL
+     * base relative URL
      */
     private static ?string $baseUrl = null;
 
