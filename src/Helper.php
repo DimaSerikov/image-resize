@@ -11,12 +11,11 @@ class Helper
     {
         return self::getBaseUrl() . Creator::$resizedBaseDir . '/' . Creator::BLANK_IMAGE_NAME;
     }
-
     /**
-     * @param int|string $quality
+     * @param int $quality
      * @return int
      */
-    public static function processQuality(int|string $quality): int
+    public static function processQuality(int $quality): int
     {
         $quality = (int) $quality;
         if ($quality > Creator::$maxQuality) {
@@ -52,7 +51,7 @@ class Helper
      * @param string $path
      * @return array|bool
      */
-    public static function parsePath(string $path): array|bool
+    public static function parsePath(string $path)
     {
         $methods = implode('|', Creator::$methods);
 
@@ -127,7 +126,7 @@ class Helper
                 $image_url = mb_substr($image_url, mb_strlen($baseUrl));
             }
         }
-        $image_url = ltrim($image_url, '/');
+        $image_url = urldecode(ltrim($image_url, '/');
 
         return $image_url;
     }
@@ -224,7 +223,7 @@ class Helper
      * @param array $rect
      * @return resource|bool
      */
-    public static function cropImage(resource $src, array $rect): bool|resource
+    public static function cropImage(resource $src, array $rect)
     {
         if (!function_exists('imagecrop')) {
             $im = imagecreatetruecolor($rect['width'], $rect['height']);

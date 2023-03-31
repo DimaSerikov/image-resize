@@ -2,6 +2,8 @@
 
 namespace Alexantr\ImageResize;
 
+use Exception;
+
 /**
  * Create URL for ImageCreator
  */
@@ -60,7 +62,7 @@ class Image
      */
     protected bool $asWebp = false;
     /**
-     * @var bool disable autorotating based on EXIF data
+     * @var bool disable autorotation based on EXIF data
      */
     protected bool $noExifRotate = false;
     /**
@@ -96,7 +98,7 @@ class Image
      * @param int|string $quality
      * @return $this
      */
-    public function quality(int|string $quality): self
+    public function quality(int $quality): self
     {
         $this->quality = Helper::processQuality($quality);
         return $this;
@@ -126,7 +128,7 @@ class Image
 
     /**
      * Place image 2/3 upper for portraits. Works with crop().
-     * Don't working with enabled noTopOffset, noBottomOffset.
+     * Don't work with enabled noTopOffset, noBottomOffset.
      * @param bool|true $value
      * @return $this
      */
@@ -225,7 +227,7 @@ class Image
     }
 
     /**
-     * Disable autorotating based on EXIF data
+     * Disable autorotation based on EXIF data
      * @param bool|true $value
      * @return $this
      */
@@ -263,6 +265,7 @@ class Image
      * @param int $width
      * @param int $height
      * @return string
+     * @throws Exception
      */
     public function crop(int $width, int $height): string
     {
@@ -274,6 +277,7 @@ class Image
      * @param int $width
      * @param int $height
      * @return string
+     * @throws Exception
      */
     public function fit(int $width, int $height): string
     {
@@ -284,6 +288,7 @@ class Image
      * Fit width
      * @param int $width
      * @return string
+     * @throws Exception
      */
     public function fitWidth(int $width): string
     {
@@ -294,6 +299,7 @@ class Image
      * Fit height
      * @param int $height
      * @return string
+     * @throws Exception
      */
     public function fitHeight(int $height): string
     {
@@ -305,6 +311,7 @@ class Image
      * @param int $width
      * @param int $height
      * @return string
+     * @throws Exception
      */
     public function fill(int $width, int $height): string
     {
@@ -316,6 +323,7 @@ class Image
      * @param int $width
      * @param int $height
      * @return string
+     * @throws Exception
      */
     public function max(int $width, int $height): string
     {
@@ -327,6 +335,7 @@ class Image
      * @param int $width
      * @param int $height
      * @return string
+     * @throws Exception
      */
     public function stretch(int $width, int $height): string
     {
@@ -338,6 +347,7 @@ class Image
      * @param int $width
      * @param int $height
      * @return string
+     * @throws Exception
      */
     public function placeCenter(int $width, int $height): string
     {
@@ -350,6 +360,7 @@ class Image
      * @param int $width
      * @param int $height
      * @return string
+     * @throws Exception
      */
     public function resize(string $method, int $width, int $height): string
     {
@@ -423,9 +434,9 @@ class Image
         $can_y_offset = $method == Creator::FIT_CROP || $method == Creator::FIT_FILL;
 
         // set dir name with all params
-        $resized_dir = "{$width}-{$height}-{$method}";
-        $resized_dir .= $this->quality !== Creator::$defaultQuality ? "-q{$this->quality}" : '';
-        $resized_dir .= $this->bgColor !== Creator::$defaultBgColor ? "-{$this->bgColor}" : '';
+        $resized_dir = "$width-$height-$method";
+        $resized_dir .= $this->quality !== Creator::$defaultQuality ? "-q$this->quality" : '';
+        $resized_dir .= $this->bgColor !== Creator::$defaultBgColor ? "-$this->bgColor" : '';
         // additional params
         $params = $this->silhouette ? 's' : '';
         $params .= $this->asJpeg ? 'j' : ($this->asPng ? 'p' : ($this->asGif ? 'f' : ($this->asWebp ? 'w' : '')));
