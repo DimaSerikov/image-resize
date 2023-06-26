@@ -219,11 +219,11 @@ class Helper
     }
 
     /**
-     * @param resource $src
+     * @param $src
      * @param array $rect
      * @return resource|bool
      */
-    public static function cropImage(resource $src, array $rect)
+    public static function cropImage($src, array $rect)
     {
         if (!function_exists('imagecrop')) {
             $im = imagecreatetruecolor($rect['width'], $rect['height']);
